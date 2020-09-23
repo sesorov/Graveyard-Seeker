@@ -1,0 +1,16 @@
+Instructions for the Dungeon Delver Editor Scene & Asset Package
+
+Before attempting to use the Dungeon Delver Editor, please do the following:
+1. Import the DungeonDelverEditor.unitypackage into your Dungeon Delver project.
+	(Of course, you've done that already if you're reading this.)
+2. Open the _Scene_Editor scene.
+3. Set your Game Pane to a 1080p (1920x1080) resolution.
+	(This should be the resolution that Dungeon Delver is already at.)
+4. Select the Canvas in the Hierarchy and look at the EditorTileSelection Script Inspector.
+	a. Make sure that EditorTileSelection.mapTexture is set to the DelverTiles Texture2D.
+5. Press Play at the top of the Unity window.
+6. Type the name of the mapData text file (in the Resources folder) that you wish to load
+	into the black input field at the top of the window.
+7. Click the Load Map button to load it. You can change the filename in the field before
+	saving to save a new document.
+8. Follow the on-screen instructions.
