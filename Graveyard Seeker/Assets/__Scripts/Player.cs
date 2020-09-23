@@ -9,14 +9,18 @@ public class Player : MonoBehaviour
 	[Range(0, 5)]
 	public float speed = 2f;
 	public float attackDuration = 0.25f; // в секундах
-
 	public float attackDelay = 0.5f; // задержка между атаками
+	public float transitionDelay = 0.5f; // задержка перехода между комнатами
+
 	[Header("Set Dynamically")]
 	public eMode mode = eMode.idle;
 
 	public int facing = 0;
 	private float timeAttackDone = 0; // время, когда завершается анимация атаки
 	private float timeAttackNext = 0; // время, когда игрок снова может атаковать
+
+	private float transitionDone = 0;
+	private Vector2 transitionPos;
 
     private Rigidbody rb;
 
@@ -36,6 +40,14 @@ public class Player : MonoBehaviour
 	}
 	private void Movement()
     {
+		if (mode == eMode.transition)
+		{
+			rb.velocity = Vector3.zero;
+			anim.speed = 0;
+			//roomPos = transitionPos;
+			if (Time.time < transitionDone) return;
+			mode = eMode.idle;
+		}
 		if (!isMovingX && !isMovingY && mode != eMode.attack) Stop();
 		else if (isMovingX)
 		{

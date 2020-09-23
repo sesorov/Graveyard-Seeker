@@ -4,20 +4,24 @@ using UnityEngine;
 
 public class TileCamera : MonoBehaviour
 {
-    static private int W, H;
-    static private int[,] MAP;
-    static public Sprite[] SPRITES;
-    static public Transform TILE_ANCHOR;
-    static public Tile[,] TILES;
+    private static int W, H;
+    private static int[,] MAP;
+    public static Sprite[] SPRITES;
+    public static Transform TILE_ANCHOR;
+    public static Tile[,] TILES;
+    public static string COLLISIONS;
 
     [Header("Set in Inspector")]
     public TextAsset mapData;
     public Texture2D mapTiles;
     public TextAsset mapCollisions;
     public Tile tilePrefab;
+    [Tooltip("mapCollisions.txt")]
+    public TextAsset collisions;
 
     private void Awake()
     {
+        COLLISIONS = collisions.text.Replace("\n", "").Replace("\r", "");
         LoadMap();
     }
 
