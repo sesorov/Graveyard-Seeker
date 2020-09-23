@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class PlayerMovement : MonoBehaviour
+public class Player : MonoBehaviour
 {
 	public enum eMode { idle, moving, attack, transition }
 
