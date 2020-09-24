@@ -40,13 +40,52 @@ public class Player : MonoBehaviour, IFacingMover
     {
 		Movement();
 	}
-	private void Movement()
+    private void LateUpdate()
+    {
+		// получаем координаты узла сетки с размером ячейки в 0.5, ближайшего к данному персонажу
+		Vector2 rPos = GetRoomPosOnGrid(0.5f);
+
+		int doorNum;
+		for (doorNum = 0; doorNum < 4; doorNum++) // проверка, находится ли персонаж на плитке с дверью
+			if (rPos == InRoom.DOORS[doorNum]) break; // обнаружили дверь
+
+		if (doorNum > 3 || doorNum != facing) return; // если игрок не находится ни в одной из дверей или не повернут в сторону выхода, то пусть стоит там и дальше
+
+		Vector2 rm = roomNum; // переходим в следующую комнату
+		switch (doorNum)
+        {
+			case 0:
+				rm.x += 1;
+				break;
+			case 1:
+				rm.y += 1;
+				break;
+			case 2:
+				rm.x -= 1;
+				break;
+			case 3:
+				rm.y -= 1;
+				break;
+		}
+
+		// проверить возможность перехода в комнату rm
+		if (rm.x >= 0 && rm.x <= InRoom.MAX_RM_X) // проверка наличия комнаты за дверью
+			if (rm.y >= 0 && rm.y <= InRoom.MAX_RM_Y)
+            {
+				roomNum = rm;
+				transitionPos = InRoom.DOORS[(doorNum + 2) % 4]; // выбирает противоположную дверь в комнате (вошел в DOORS[3], вышел в DOORS[1])
+				roomPos = transitionPos;
+				mode = eMode.transition; // переводим игрока в режим transition, что вызывает короткую задержку перехода, чтоб игрок увидел комнату
+				transitionDone = Time.time + transitionDelay;
+            }
+    }
+    private void Movement()
     {
 		if (mode == eMode.transition)
 		{
 			rb.velocity = Vector3.zero;
 			anim.speed = 0;
-			//roomPos = transitionPos;
+			roomPos = transitionPos; // сохраняем местоположение игрока относительно комнаты
 			if (Time.time < transitionDone) return;
 			mode = eMode.idle;
 		}

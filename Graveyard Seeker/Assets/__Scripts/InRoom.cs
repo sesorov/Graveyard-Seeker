@@ -10,7 +10,7 @@ public class InRoom : MonoBehaviour
 
     public static int MAX_RM_X = 9;
     public static int MAX_RM_Y = 9;
-    public Vector2[] DOORS = new Vector2[]
+    public static Vector2[] DOORS = new Vector2[]
     {
         new Vector2(14, 5),
         new Vector2(7.5f, 9),
