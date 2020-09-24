@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IFacingMover
 {
 	public enum eMode { idle, moving, attack, transition }
 
@@ -29,10 +29,12 @@ public class Player : MonoBehaviour
 	private bool isRight = false;
 	private bool isUp = false;
 	private Animator anim;
+	private InRoom inRm; // открывает доступ к подключенному классу InRoom
 	void Awake()
 	{
 		rb = GetComponent<Rigidbody>();
 		anim = GetComponent<Animator>();
+		inRm = GetComponent<InRoom>();
 	}
     private void Update()
     {
@@ -130,5 +132,44 @@ public class Player : MonoBehaviour
 			timeAttackDone = Time.time + attackDuration;
 			timeAttackNext = Time.time + attackDelay;
 		}
+    }
+
+	// IFcaingMover methods
+
+	public int GetFacing()
+    {
+		return facing;
+    }
+	public bool moving
+    {
+		get
+        {
+			return (mode == eMode.moving);
+        }
+    }
+	public float GetSpeed()
+    {
+		return speed;
+    }
+	public float gridMult
+    {
+        get
+        {
+			return inRm.gridMult;
+        }
+    }
+	public Vector2 roomPos
+    {
+		get { return inRm.roomPos; }
+		set { inRm.roomPos = value; }
+    }
+	public Vector2 roomNum
+    {
+		get { return inRm.roomNum; }
+		set { inRm.roomNum = value; }
+	}
+	public Vector2 GetRoomPosOnGrid (float mult = -1)
+    {
+		return inRm.GetRoomPosOnGrid(mult);
     }
 }
