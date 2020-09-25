@@ -1156,8 +1156,12 @@ MonoBehaviour:
   attackDelay: 0.5
   transitionDelay: 0.5
   maxHealth: 10
+  knockbackSpeed: 10
+  knockbackDuration: 0.25
+  invicibleDuration: 0.5
   mode: 0
   numKeys: 0
+  invicible: 0
   _health: 0
   facing: 0
 --- !u!135 &1066290661
@@ -1378,6 +1382,7 @@ GameObject:
   - component: {fileID: 1143720266}
   - component: {fileID: 1143720268}
   - component: {fileID: 1143720267}
+  - component: {fileID: 1143720269}
   m_Layer: 0
   m_Name: Sword
   m_TagString: Untagged
@@ -1462,6 +1467,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1143720269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1143720265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff7b0b67ed3b1ce4aa75d7dc5a46a60d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 2
+  knockback: 1
 --- !u!1 &1263856470
 GameObject:
   m_ObjectHideFlags: 0
@@ -1577,6 +1596,7 @@ GameObject:
   - component: {fileID: 1282317139}
   - component: {fileID: 1282317140}
   - component: {fileID: 1282317141}
+  - component: {fileID: 1282317142}
   m_Layer: 0
   m_Name: Skeletos
   m_TagString: Untagged
@@ -1741,6 +1761,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 406171b2d8d2512479396192d53716d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1282317142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1282317133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff7b0b67ed3b1ce4aa75d7dc5a46a60d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 1
+  knockback: 1
 --- !u!1 &1528894964
 GameObject:
   m_ObjectHideFlags: 0
