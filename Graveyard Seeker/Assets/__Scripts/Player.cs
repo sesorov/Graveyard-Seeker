@@ -139,6 +139,23 @@ public class Player : MonoBehaviour, IFacingMover, IKeyMaster
 			knockbackDone = Time.time + knockbackDuration;
         }
     }
+    private void OnTriggerEnter(Collider colld)
+    {
+		PickUp pick = colld.GetComponent<PickUp>();
+		if (pick == null) return;
+		switch (pick.itemType)
+        {
+			case PickUp.eType.health:
+				health = Mathf.Min(health + 2, maxHealth); // чтоб здоровье не вышло за границу
+				break;
+			case PickUp.eType.key:
+				keyCount++;
+				break;
+			default:
+				break;
+        }
+		Destroy(colld.gameObject);
+    }
     private void Movement()
     {
 		if (mode == eMode.transition)

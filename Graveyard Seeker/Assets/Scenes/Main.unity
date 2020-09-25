@@ -1728,8 +1728,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de949fcffdf07e24ba3d71f80a89c89e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 1
+  maxHealth: 4
+  knockbackSpeed: 10
+  knockbackDuration: 0.25
+  invicibleDuration: 0.5
   health: 0
+  invicible: 0
+  knockback: 0
   speed: 2
   timeThinkMin: 1
   timeThinkMax: 4
