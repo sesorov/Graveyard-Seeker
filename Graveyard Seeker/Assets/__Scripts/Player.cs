@@ -11,11 +11,20 @@ public class Player : MonoBehaviour, IFacingMover, IKeyMaster
 	public float attackDuration = 0.25f; // в секундах
 	public float attackDelay = 0.5f; // задержка между атаками
 	public float transitionDelay = 0.5f; // задержка перехода между комнатами
-	public int maxHealth = 10;
+	public int maxHealth = 10; // каждый кружок = 2 очка здоровья
 
 	[Header("Set Dynamically")]
 	public eMode mode = eMode.idle;
 	public int numKeys = 0;
+
+	[SerializeField]
+	private int _health;
+
+	public int health
+    {
+		get { return _health; }
+		set { _health = value;  }
+    }		
 
 	public int facing = 0;
 	private float timeAttackDone = 0; // время, когда завершается анимация атаки
@@ -37,6 +46,7 @@ public class Player : MonoBehaviour, IFacingMover, IKeyMaster
 		rb = GetComponent<Rigidbody>();
 		anim = GetComponent<Animator>();
 		inRm = GetComponent<InRoom>();
+		health = maxHealth;
 	}
     private void Update()
     {

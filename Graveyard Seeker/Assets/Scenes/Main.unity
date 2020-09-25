@@ -309,6 +309,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 328828755}
   m_CullTransparentMesh: 0
+--- !u!1 &464559310 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1000013282365372, guid: ef2195d4d1bab4df9ad6dc73b0faebb1,
+    type: 3}
+  m_PrefabInstance: {fileID: 890876086}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &464559311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 464559310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a754f25a74da044b9ad20697dfa0cff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1066290660}
+  healthFull: {fileID: 21300004, guid: 7e5dff7b4f89342ffaefe40a143cfe81, type: 3}
+  healthHalf: {fileID: 21300002, guid: 7e5dff7b4f89342ffaefe40a143cfe81, type: 3}
+  healthEmpty: {fileID: 21300000, guid: 7e5dff7b4f89342ffaefe40a143cfe81, type: 3}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -628,7 +650,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1000013282365372, guid: ef2195d4d1bab4df9ad6dc73b0faebb1, type: 3}
       propertyPath: m_Name
-      value: DelverPanel
+      value: UIPanel
       objectReference: {fileID: 0}
     - target: {fileID: 114000011822264596, guid: ef2195d4d1bab4df9ad6dc73b0faebb1,
         type: 3}
@@ -1136,6 +1158,7 @@ MonoBehaviour:
   maxHealth: 10
   mode: 0
   numKeys: 0
+  _health: 0
   facing: 0
 --- !u!135 &1066290661
 SphereCollider:
