@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Player : MonoBehaviour, IFacingMover
+public class Player : MonoBehaviour, IFacingMover, IKeyMaster
 {
 	public enum eMode { idle, moving, attack, transition }
 
@@ -11,9 +11,11 @@ public class Player : MonoBehaviour, IFacingMover
 	public float attackDuration = 0.25f; // в секундах
 	public float attackDelay = 0.5f; // задержка между атаками
 	public float transitionDelay = 0.5f; // задержка перехода между комнатами
+	public int maxHealth = 10;
 
 	[Header("Set Dynamically")]
 	public eMode mode = eMode.idle;
+	public int numKeys = 0;
 
 	public int facing = 0;
 	private float timeAttackDone = 0; // время, когда завершается анимация атаки
@@ -210,5 +212,10 @@ public class Player : MonoBehaviour, IFacingMover
 	public Vector2 GetRoomPosOnGrid (float mult = -1)
     {
 		return inRm.GetRoomPosOnGrid(mult);
+    }
+	public int keyCount
+    {
+		get { return numKeys; }
+		set { numKeys = value;  }
     }
 }

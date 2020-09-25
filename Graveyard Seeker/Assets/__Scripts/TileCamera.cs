@@ -5,7 +5,7 @@ using UnityEngine;
 public class TileCamera : MonoBehaviour
 {
     private static int W, H;
-    private static int[,] MAP;
+    private static int[,] MAP; // приватный с методами GET_MAP() и SET_MAP() во избежание IndexOutOfRangeException
     public static Sprite[] SPRITES;
     public static Transform TILE_ANCHOR;
     public static Tile[,] TILES;
@@ -73,7 +73,7 @@ public class TileCamera : MonoBehaviour
         return GET_MAP(Mathf.RoundToInt(x), Mathf.RoundToInt(y - 0.25f)); // -0.25f потому, что перс может находиться за пределами Tile, но юнити считает, что он на ней
     }
 
-    public static void SET_MAP(int x, int y, int tNum)
+    public static void SET_MAP(int x, int y, int tNum) // точка останова, если карта генерируется неверно
     {
         if (x < 0 || x >= W || y < 0 || y >= H)
         {

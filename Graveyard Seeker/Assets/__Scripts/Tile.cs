@@ -22,6 +22,7 @@ public class Tile : MonoBehaviour
         gameObject.name = x.ToString("D3") + "x" + y.ToString("D3"); //вернет число в десятичной форме (3+ символа) в виде строки (для x=23 и y=5 -> "023x005")
 
         if (_tileNum == -1) _tileNum = TileCamera.GET_MAP(x, y);
+        else TileCamera.SET_MAP(x, y, _tileNum); // замена плитки (для открытия двери заменим закрытую на открытую)
         tileNum = _tileNum;
         GetComponent<SpriteRenderer>().sprite = TileCamera.SPRITES[tileNum];
         SetCollider();
