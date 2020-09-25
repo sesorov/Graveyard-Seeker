@@ -3,7 +3,7 @@
 [RequireComponent(typeof(Rigidbody))]
 public class Player : MonoBehaviour, IFacingMover, IKeyMaster
 {
-	public enum eMode { idle, moving, attack, transition }
+	public enum eMode { idle, moving, attack, transition, knockback }
 
 	[Header("Set in Inspector")]
 	[Range(0, 5)]
@@ -11,11 +11,24 @@ public class Player : MonoBehaviour, IFacingMover, IKeyMaster
 	public float attackDuration = 0.25f; // в секундах
 	public float attackDelay = 0.5f; // задержка между атаками
 	public float transitionDelay = 0.5f; // задержка перехода между комнатами
-	public int maxHealth = 10;
+	public int maxHealth = 10; // каждый кружок = 2 очка здоровья
+	public float knockbackSpeed = 10;
+	public float knockbackDuration = 0.25f;
+	public float invicibleDuration = 0.5f;
 
 	[Header("Set Dynamically")]
 	public eMode mode = eMode.idle;
 	public int numKeys = 0;
+	public bool invicible = false;
+
+	[SerializeField]
+	private int _health;
+
+	public int health
+    {
+		get { return _health; }
+		set { _health = value;  }
+    }		
 
 	public int facing = 0;
 	private float timeAttackDone = 0; // время, когда завершается анимация атаки
@@ -23,6 +36,11 @@ public class Player : MonoBehaviour, IFacingMover, IKeyMaster
 
 	private float transitionDone = 0;
 	private Vector2 transitionPos;
+
+	private float knockbackDone = 0;
+	private float invicibleDone = 0;
+	private Vector3 knockbackVel;
+	private SpriteRenderer sRend;
 
     private Rigidbody rb;
 
@@ -35,12 +53,22 @@ public class Player : MonoBehaviour, IFacingMover, IKeyMaster
 	void Awake()
 	{
 		rb = GetComponent<Rigidbody>();
+		sRend = GetComponent<SpriteRenderer>();
 		anim = GetComponent<Animator>();
 		inRm = GetComponent<InRoom>();
+		health = maxHealth;
 	}
     private void Update()
     {
 		Movement();
+		// проверим состояние неуязвимости и необходимость отбрасывания
+		if (invicible && Time.time > invicibleDone) invicible = false; // проверяем окончание неуязвимости
+		sRend.color = invicible ? Color.red : Color.white; // если игрок неуязвим, окрашиваем его в красный
+		if (mode == eMode.knockback)
+        {
+			rb.velocity = knockbackVel;
+			if (Time.time < knockbackDone) return;
+        }
 	}
     private void LateUpdate()
     {
@@ -80,6 +108,36 @@ public class Player : MonoBehaviour, IFacingMover, IKeyMaster
 				mode = eMode.transition; // переводим игрока в режим transition, что вызывает короткую задержку перехода, чтоб игрок увидел комнату
 				transitionDone = Time.time + transitionDelay;
             }
+    }
+    private void OnCollisionEnter(Collision coll)
+    {
+		if (invicible) return; // игрок неуязвим - выходим
+		DamageEffect dEff = coll.gameObject.GetComponent<DamageEffect>();
+		if (dEff == null) return; // если нет DamageEffect - выходим
+
+		health -= dEff.damage;
+		invicible = true;
+		invicibleDone = Time.time + invicibleDuration;
+
+		if (dEff.knockback) // выполняем отбрасывание от удара
+        {
+			Vector3 delta = transform.position - coll.transform.position;
+			if (Mathf.Abs(delta.x) >= Mathf.Abs(delta.y)) // отбрасывание по горизонтали
+            {
+				delta.x = (delta.x > 0) ? 1 : -1;
+				delta.y = 0;
+            }
+            else // отбрасывание по вертикали
+            {
+				delta.x = 0;
+				delta.y = (delta.y > 0) ? 1 : -1;
+            }
+
+			knockbackVel = delta * knockbackSpeed;
+			rb.velocity = knockbackVel; // применяем величину отбрасывания к игроку
+			mode = eMode.knockback;
+			knockbackDone = Time.time + knockbackDuration;
+        }
     }
     private void Movement()
     {
