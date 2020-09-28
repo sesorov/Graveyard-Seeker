@@ -2,6 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public class TileSwap // сериализуемый класс включает инфу, необходимую для замены плитки вещи/врага на соответствующий префаб
+{
+    public int tileNum; // индекс плитки в тайлмап-png
+    public GameObject swapPrefab; // префаб для замены
+    public GameObject dropItem; // враг может гарантированно что-то оставлять
+    public int overrideTileNum = -1; // обычная плитка
+}
+
 public class TileCamera : MonoBehaviour
 {
     private static int W, H;
@@ -16,12 +25,21 @@ public class TileCamera : MonoBehaviour
     public Texture2D mapTiles;
     public TextAsset mapCollisions;
     public Tile tilePrefab;
+
+    public int defaultTileNum; // обычная плитка (29)
+    public List<TileSwap> tileSwaps;
+
+    private Dictionary<int, TileSwap> tileSwapDict;
+    private Transform enemyAnchor, itemAnchor;
     [Tooltip("mapCollisions.txt")]
     public TextAsset collisions;
 
     private void Awake()
     {
         COLLISIONS = collisions.text.Replace("\n", "").Replace("\r", "");
+        PrepareTileSwapDict();
+        enemyAnchor = (new GameObject("Enemy Anchor")).transform;
+        itemAnchor = (new GameObject("Item Anchor")).transform;
         LoadMap();
     }
 
@@ -50,6 +68,7 @@ public class TileCamera : MonoBehaviour
             {
                 if (tileNums[i] == "..") MAP[i, j] = 0; // ".." == пустота
                 else MAP[i, j] = int.Parse(tileNums[i], hexNum);
+                CheckTileSwaps(i, j);
             }
         }
         print("Parsed " + SPRITES.Length + " sprites."); // !!! ТОЧКА ОСТАНОВА для проверки значений в полях MAP и SPRITES
@@ -95,5 +114,32 @@ public class TileCamera : MonoBehaviour
                     tempTile.SetTile(i, j);
                     TILES[i, j] = tempTile;
                 }
+    }
+
+    private void PrepareTileSwapDict() // обходит все элементы списка tileSwaps и добавляет их в словарь в соответствии с их номером tileNum
+    {
+        tileSwapDict = new Dictionary<int, TileSwap>();
+        foreach (TileSwap ts in tileSwaps) tileSwapDict.Add(ts.tileNum, ts);
+    }
+
+    private void CheckTileSwaps(int i, int j) // принимает координаты особого тайла, извлекает её индекс из MAP и производит замену (если тайл включен в tileSwapDict)
+    {
+        int tNum = GET_MAP(i, j);
+        if (!tileSwapDict.ContainsKey(tNum)) return; // выходим, если тайл - не враг и не предмет
+        // иначе заменяем тайл на префаб
+        TileSwap ts = tileSwapDict[tNum];
+        if (ts.swapPrefab != null) // если tileSwapDict содержит элемент с ключом tileNum (tNum), то извлекаем из него соответствующий экземпляр класса TileSwap
+        {
+            GameObject temp = Instantiate(ts.swapPrefab);
+            Enemy e = temp.GetComponent<Enemy>();
+            if (e != null) temp.transform.SetParent(enemyAnchor);
+            else temp.transform.SetParent(itemAnchor);
+            temp.transform.position = new Vector3(i, j, 0);
+            if (ts.dropItem != null) // если у него есть дроп - добавляем
+                if (e != null)
+                    e.dropItem = ts.dropItem;
+        }
+        if (ts.overrideTileNum == -1) SET_MAP(i, j, defaultTileNum); // в итоге вносим изменения в карту TileCamera.MAP
+        else SET_MAP(i, j, ts.overrideTileNum);
     }
 }

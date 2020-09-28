@@ -14,6 +14,7 @@ public class Enemy : MonoBehaviour
     public float knockbackSpeed = 10;
     public float knockbackDuration = 0.25f;
     public float invicibleDuration = 0.5f;
+    public GameObject[] randomlyDroppedItems; // оставить null, если враг ничего не дропает после смерти, либо добавить любое количество предметов (выберется рандомный)
     [Tooltip("Leave empty if no drop")]
     public GameObject dropItem = null; // оставить null, если враг ничего не дропает после смерти
 
@@ -91,6 +92,15 @@ public class Enemy : MonoBehaviour
         {
             drop = Instantiate(dropItem);
             drop.transform.position = transform.position;
+        }
+        else if (randomlyDroppedItems.Length > 0)
+        {
+            GameObject tempDrop = randomlyDroppedItems[Random.Range(0, randomlyDroppedItems.Length)]; // выбираем рандомный предмет из массива
+            if (tempDrop != null)
+            {
+                drop = Instantiate(tempDrop);
+                drop.transform.position = transform.position;
+            }
         }
         Destroy(gameObject);
     }
