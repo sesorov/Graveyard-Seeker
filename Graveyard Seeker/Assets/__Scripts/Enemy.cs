@@ -14,6 +14,8 @@ public class Enemy : MonoBehaviour
     public float knockbackSpeed = 10;
     public float knockbackDuration = 0.25f;
     public float invicibleDuration = 0.5f;
+    [Tooltip("Leave empty if no drop")]
+    public GameObject dropItem = null; // оставить null, если враг ничего не дропает после смерти
 
     [Header("Set Dynamically: Enemy")]
     public float health;
@@ -84,6 +86,12 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
+        GameObject drop;
+        if (dropItem != null)
+        {
+            drop = Instantiate(dropItem);
+            drop.transform.position = transform.position;
+        }
         Destroy(gameObject);
     }
 }
