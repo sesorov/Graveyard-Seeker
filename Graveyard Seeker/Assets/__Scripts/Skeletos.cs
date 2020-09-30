@@ -12,6 +12,8 @@ public class Skeletos : Enemy, IFacingMover
     [Header("Set Dynamically: Skeletos")]
     public int facing = 0;
     public float timeNextDecision = 0;
+    public byte difficulty = 0;
+    private Transform player;
 
     private InRoom inRm;
 
@@ -19,17 +21,42 @@ public class Skeletos : Enemy, IFacingMover
     {
         base.Awake();
         inRm = GetComponent<InRoom>();
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+        // настроить difficulty по доанным с объекта с dontdestroyonload
     }
 
     protected override void Update()
     {
         base.Update();
         if (knockback) return;
-        if (Time.time >= timeNextDecision)
+
+        if (difficulty == 0)
         {
-            DecideDirection();
+
+            if (Time.time >= timeNextDecision)
+            {
+                DecideDirection();
+            }
+            rigid.velocity = directions[facing] * speed; // унаследвано от Enemy, инициализируется в Enemy.Awake()
         }
-        rigid.velocity = directions[facing] * speed; // унаследвано от Enemy, инициализируется в Enemy.Awake()
+
+        if (difficulty == 1)
+        {
+            transform.gameObject.GetComponent<GridMove>().enabled = false;
+            if (Vector2.Distance(transform.position, player.position) < 3)
+            {
+                rigid.velocity = new Vector3(0, 0, 0);
+                transform.position = Vector3.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
+            }
+            else
+            {
+                if (Time.time >= timeNextDecision)
+                {
+                    DecideDirection();
+                }
+                rigid.velocity = directions[facing] * speed;
+            }
+        }
     }
 
     private void DecideDirection() // выбор случайного направления + случайный интервал времени до следующей смены направления
