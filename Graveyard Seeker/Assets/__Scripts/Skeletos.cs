@@ -8,17 +8,33 @@ public class Skeletos : Enemy, IFacingMover
     public int speed = 2;
     public float timeThinkMin = 1f;
     public float timeThinkMax = 4f;
+    public int skinType = 1;  // 1 - культист с маской чумного доктора, 2 - культист "безликий"
+    public RuntimeAnimatorController cultist_1;
+    public RuntimeAnimatorController cultist_2;
 
     [Header("Set Dynamically: Skeletos")]
     public int facing = 0;
     public float timeNextDecision = 0;
     public byte difficulty = 0;
     private Transform player;
+    private Vector3 curPos, lastPos;
 
     private InRoom inRm;
 
     protected override void Awake()
     {
+        skinType = Random.Range(1, 3);  // 1 или 2
+        switch(skinType)
+        {
+            case 1:
+                break;
+            case 2:
+                GetComponent<Animator>().runtimeAnimatorController = cultist_2;
+                break;
+            default:
+                break;
+        }
+        lastPos = transform.position;
         base.Awake();
         inRm = GetComponent<InRoom>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -29,6 +45,14 @@ public class Skeletos : Enemy, IFacingMover
     {
         base.Update();
         if (knockback) return;
+
+        curPos = transform.position;  // если уперся в стену или просто стоит - не проигрываем анимацию
+        if (rigid.velocity.magnitude < 0.2)
+        {
+            anim.CrossFade("Cultist_" + skinType.ToString() + "_idle", 0);
+            anim.speed = 0;
+        }
+        lastPos = curPos;
 
         if (difficulty == 0)
         {
@@ -63,6 +87,8 @@ public class Skeletos : Enemy, IFacingMover
     {
         facing = Random.Range(0, 4);
         timeNextDecision = Time.time + Random.Range(timeThinkMin, timeThinkMax);
+        anim.CrossFade("Cultist_" + skinType.ToString() + "_walk_" + facing.ToString(), 0);
+        anim.speed = 1;
     }
     
     public int GetFacing()

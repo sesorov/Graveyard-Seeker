@@ -14,7 +14,7 @@ public class Devil : Enemy, IFacingMover
     public float timeNextDecision = 0;
     public byte difficulty = 0;
     private Transform player;
-    Vector3 curPos, lastPos;
+    private Vector3 curPos, lastPos;
 
     private InRoom inRm;
 
@@ -31,7 +31,8 @@ public class Devil : Enemy, IFacingMover
     {
         base.Update();
         if (knockback) return;
-        curPos = transform.position;
+
+        curPos = transform.position;  // если уперся в стену или просто стоит - не проигрываем анимацию
         if (rigid.velocity.magnitude < 0.2)
         {
             anim.CrossFade("Devil_idle", 0);
