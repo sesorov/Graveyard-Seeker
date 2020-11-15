@@ -7,7 +7,11 @@ public class SceneBrain : MonoBehaviour
 {
     public GameObject player;
     public GameObject instance;
-    
+
+    public bool isFirstAltered = false;
+    public bool isSecondAltered = false;
+    public bool isThirdAltered = false;
+
     [SerializeField]
     private Vector3 _playerPos;
 

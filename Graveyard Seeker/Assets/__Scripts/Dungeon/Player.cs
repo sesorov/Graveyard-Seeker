@@ -117,9 +117,7 @@ public class Player : MonoBehaviour, IFacingMover, IKeyMaster
 
 		health -= dEff.damage;
 		if (health <= 0)
-        {
-			gameObject.GetComponent<ChangeScene>().load();
-        }
+			Death();
 		invicible = true;
 		invicibleDone = Time.time + invicibleDuration;
 
@@ -194,6 +192,11 @@ public class Player : MonoBehaviour, IFacingMover, IKeyMaster
 			Stop();
 		}
     }
+	private void Death()
+    {
+		// добавить анимацию
+		gameObject.GetComponent<ChangeScene>().load();
+	}
 	public void SetHorizontalMovement(bool _isRight)
     {
 		isRight = _isRight;
