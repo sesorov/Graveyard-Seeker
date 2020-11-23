@@ -120,6 +120,7 @@ public class LinePuzzle : MonoBehaviour
         {
             PuzzleComplete = true;
             PuzzleFocused = false;
+            Destroy(transform.parent.gameObject); // move to the next
         }
         else
         {
