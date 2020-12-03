@@ -15,6 +15,7 @@ public class Devil : Enemy, IFacingMover
     public byte difficulty = 0;
     private Transform player;
     private Vector3 curPos, lastPos;
+    private SceneBrain gameController;
 
     private InRoom inRm;
 
@@ -68,6 +69,10 @@ public class Devil : Enemy, IFacingMover
             }
         }
     }
+    protected void Start()
+    {
+        gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<SceneBrain>();
+    }
 
     private void DecideDirection() // выбор случайного направления + случайный интервал времени до следующей смены направления
     {
@@ -75,6 +80,18 @@ public class Devil : Enemy, IFacingMover
         timeNextDecision = Time.time + Random.Range(timeThinkMin, timeThinkMax);
         anim.CrossFade("Devil_walk_" + facing.ToString(), 0);
         anim.speed = 1;
+    }
+    protected override void Die()
+    {
+        // добавить анимацию
+        gameController.isFirstAltered = true; // игрок вмешался и предотвратил первую смерть
+        player.GetComponent<ChangeScene>().load(); // возвращаем игрока в лобби (кладбище)
+        base.Die();
+    }
+
+    public void LeaveDungeon()
+    {
+        Die();
     }
 
     public int GetFacing()

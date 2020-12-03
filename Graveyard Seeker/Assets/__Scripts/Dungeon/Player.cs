@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Player : MonoBehaviour, IFacingMover, IKeyMaster
@@ -15,6 +16,7 @@ public class Player : MonoBehaviour, IFacingMover, IKeyMaster
 	public float knockbackSpeed = 10;
 	public float knockbackDuration = 0.25f;
 	public float invicibleDuration = 0.5f;
+	public GameObject roomLight;
 
 	[Header("Set Dynamically")]
 	public eMode mode = eMode.idle;
@@ -116,10 +118,9 @@ public class Player : MonoBehaviour, IFacingMover, IKeyMaster
 		if (dEff == null) return; // если нет DamageEffect - выходим
 
 		health -= dEff.damage;
+		roomLight.GetComponent<Light2D>().intensity -= dEff.damage / 10.0f;
 		if (health <= 0)
-        {
-			gameObject.GetComponent<ChangeScene>().load();
-        }
+			Death();
 		invicible = true;
 		invicibleDone = Time.time + invicibleDuration;
 
@@ -194,6 +195,11 @@ public class Player : MonoBehaviour, IFacingMover, IKeyMaster
 			Stop();
 		}
     }
+	private void Death()
+    {
+		// добавить анимацию
+		gameObject.GetComponent<ChangeScene>().load();
+	}
 	public void SetHorizontalMovement(bool _isRight)
     {
 		isRight = _isRight;

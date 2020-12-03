@@ -52,6 +52,12 @@ public class Tile : MonoBehaviour
                 break;
             default: // все остальное: _, |, и т.д.
                 bColl.enabled = false;
+                if (tileNum == 99)
+                {
+                    gameObject.AddComponent<LeaveLevel>();
+                    bColl.enabled = true;
+                    bColl.isTrigger = true;
+                }
                 break;
         }
     }
