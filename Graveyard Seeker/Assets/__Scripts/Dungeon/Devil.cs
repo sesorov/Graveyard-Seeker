@@ -89,6 +89,11 @@ public class Devil : Enemy, IFacingMover
         base.Die();
     }
 
+    public void LeaveDungeon()
+    {
+        Die();
+    }
+
     public int GetFacing()
     {
         return facing;
