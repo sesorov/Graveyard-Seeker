@@ -8,10 +8,14 @@ public class PuzzleActivate : MonoBehaviour
     public Camera mainCam;
     public GameObject puzzles;
     public GameObject playerCam;
+    public GameObject roomManager;
     public string puzzleSceneName;
+
+    private static RoomData rd;
+
     private void Start()
     {
-
+        rd = DataSaver.loadData<RoomData>("room_data");
     }
     public void BeginPuzzle()
     {
@@ -36,12 +40,20 @@ public class PuzzleActivate : MonoBehaviour
             puzzles.SetActive(true);
             playerCam.SetActive(true);
             if (puzzles.transform.childCount == 0)
+            {
+                if (puzzleSceneName == "Tube")
+                    rd.is_tube = true;
+                else if (puzzleSceneName == "SlidingPuzzle")
+                    rd.is_sliding = true;
+                DataSaver.saveData<RoomData>(rd, "room_data");
                 EndPuzzle();
+            }
         }
         else if (SceneManager.GetActiveScene().name == "room" && mainCam != null)
         {
             mainCam.enabled = true;
             gameObject.GetComponent<SpriteRenderer>().enabled = true;
+            roomManager.GetComponent<RoomManager>().data = DataSaver.loadData<RoomData>("room_data");
         }
     }
 }

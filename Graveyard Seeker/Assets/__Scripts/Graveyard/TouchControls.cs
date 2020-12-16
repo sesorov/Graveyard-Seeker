@@ -11,10 +11,12 @@ public class TouchControls : MonoBehaviour
     [Header("Current Direction")]
     [SerializeField]
     private Vector3 direction; // вектор направления касания
+    private bool isMoving;
 
     private void Start()
     {
         touch.transform.position = threshold.position;
+        isMoving = false;
     }
 
     private void Update()
@@ -29,17 +31,20 @@ public class TouchControls : MonoBehaviour
             if (direction.magnitude < Mathf.Sqrt(2)) // ограничение радиуса джойстика
             {
                 touch.transform.position = touchPos; // если касание в джойстике - перемещаем индикатор
+                isMoving = true;
             }
-            Move(direction); // двигаем в любом случае, если есть касание, чтобы игрок мог выходить пальцем за пределы ограничительного радиуса
+            if (isMoving)
+                Move(direction); // двигаем в любом случае, если есть касание, чтобы игрок мог выходить пальцем за пределы ограничительного радиуса
         }
         else
         {
             touch.transform.position = threshold.position; // нет касания - возвращаем индикатор касания на место
             Move(Vector3.zero); // останавливаем игрока
+            isMoving = false;
         }
     }
     private void Move(Vector3 dir)
     {
-        transform.Translate(dir * speed * Time.deltaTime);
+        transform.Translate(dir.normalized * speed * Time.deltaTime);
     }
 }

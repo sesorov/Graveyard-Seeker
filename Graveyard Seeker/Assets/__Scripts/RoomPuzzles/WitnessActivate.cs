@@ -8,6 +8,7 @@ public class WitnessActivate : MonoBehaviour
     public Camera mainCam;
     public GameObject puzzles;
     public GameObject playerCam;
+    public GameObject roomManager;
     private void Start()
     {
 
@@ -35,7 +36,9 @@ public class WitnessActivate : MonoBehaviour
             puzzles.SetActive(true);
             playerCam.SetActive(true);
             if (puzzles.transform.childCount == 0)
+            {
                 EndPuzzle();
+            }
         }
         else if (SceneManager.GetActiveScene().name == "room" && mainCam != null)
         {

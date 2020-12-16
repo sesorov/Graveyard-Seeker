@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Menu.unity
+    guid: c3517327a43b87c41a30189b3b9eac76
+  - enabled: 1
     path: Assets/Scenes/graveyard.unity
     guid: ff1d50ebd50f1d34687cfad8ceded778
   - enabled: 1
@@ -20,7 +23,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Tube.unity
     guid: d66a8e15811310142ba479754c2d0378
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/TrapRoom.unity
     guid: bff044accc9303741a580a886bbbe137
+  - enabled: 1
+    path: Assets/Scenes/SlidingPuzzle.unity
+    guid: c78156a8d0505db48bc2d754df2cd940
   m_configObjects: {}
