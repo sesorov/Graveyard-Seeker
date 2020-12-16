@@ -9,9 +9,12 @@ public class WitnessActivate : MonoBehaviour
     public GameObject puzzles;
     public GameObject playerCam;
     public GameObject roomManager;
+
+    private static RoomData rd;
+
     private void Start()
     {
-
+        rd = DataSaver.loadData<RoomData>("room_data");
     }
     public void BeginPuzzle()
     {
@@ -37,6 +40,8 @@ public class WitnessActivate : MonoBehaviour
             playerCam.SetActive(true);
             if (puzzles.transform.childCount == 0)
             {
+                rd.is_witness = true;
+                DataSaver.saveData<RoomData>(rd, "room_data");
                 EndPuzzle();
             }
         }

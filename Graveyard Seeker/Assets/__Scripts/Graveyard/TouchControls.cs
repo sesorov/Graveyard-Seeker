@@ -12,11 +12,17 @@ public class TouchControls : MonoBehaviour
     [SerializeField]
     private Vector3 direction; // вектор направления касания
     private bool isMoving;
+    private Animator anim;
+    private void Awake()
+    {
+        anim = GetComponent<Animator>();
+    }
 
     private void Start()
     {
         touch.transform.position = threshold.position;
         isMoving = false;
+        anim.speed = 1;
     }
 
     private void Update()
@@ -38,13 +44,21 @@ public class TouchControls : MonoBehaviour
         }
         else
         {
+            isMoving = false;
             touch.transform.position = threshold.position; // нет касания - возвращаем индикатор касания на место
             Move(Vector3.zero); // останавливаем игрока
-            isMoving = false;
+            anim.CrossFade("Idle", 0);
         }
     }
     private void Move(Vector3 dir)
     {
         transform.Translate(dir.normalized * speed * Time.deltaTime);
+        if (isMoving)
+        {
+            gameObject.GetComponent<SpriteRenderer>().flipX = dir.x < 0;
+            anim.CrossFade("Walk", 0);
+        }
+        else
+            anim.CrossFade("Idle", 0);
     }
 }
