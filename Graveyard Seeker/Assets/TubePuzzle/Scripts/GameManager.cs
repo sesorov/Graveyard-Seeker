@@ -31,7 +31,6 @@ public class GameManager : MonoBehaviour
 
       if(correctedPipes == totalPipes)
       {
-        Debug.Log("You win!");
             foreach (Transform child in puzzle.transform)
                 Destroy(child.gameObject);
       }
